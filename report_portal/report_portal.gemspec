@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   end
 
   # This should be kept in sync with the Ruby version used by the main app
-  spec.required_ruby_version = ">= 3.2.1"
+  spec.required_ruby_version = ">= 3.3.4"
 
   spec.add_runtime_dependency "devise", "~> 4.9"
   spec.add_runtime_dependency "govuk-components", "~> 5.0"
