@@ -23,7 +23,6 @@ gem "image_processing"
 gem "interactor"
 gem "jbuilder"
 gem "jsbundling-rails"
-gem "lograge"
 gem "mini_magick"
 gem "opensearch-ruby"
 
@@ -127,3 +126,7 @@ gem "data_migrate"
 gem "flipper"
 gem "flipper-active_record"
 gem "flipper-ui"
+
+# Log formatting
+gem "json_tagged_logger"
+gem "lograge"
