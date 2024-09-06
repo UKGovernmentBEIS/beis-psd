@@ -19,7 +19,7 @@ services:
       - "3006:3006"
 
   opensearch:
-    image: opensearchproject/opensearch:1.2.3
+    image: opensearchproject/opensearch:2.15.0
     environment:
       - "discovery.type=single-node"
       - "OPENSEARCH_JAVA_OPTS=-Xms750m -Xmx750m"
