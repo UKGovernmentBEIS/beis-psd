@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby "3.2.1"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.15"
-gem "active_storage_validations", "~> 1.4.0"
+gem "active_storage_validations", "~> 2.0.0"
 gem "aws-sdk-s3", "~> 1.178"
 gem "aws-sdk-s3control", "~> 1.101"
 gem "bootsnap", require: false
