@@ -255,6 +255,9 @@ module Notifications
           end
 
           return render_wizard
+        else
+          flash[:success] = "You have updated the notification!"
+          return redirect_to notification_path(@notification)
         end
       end
 
