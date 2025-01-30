@@ -186,7 +186,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :edit do
+        resources :edit, only: %i[index show update] do
           collection do
             get "remove-business/:investigation_business_id", to: "edit#remove_business", as: "remove_business"
             delete "remove-business/:investigation_business_id", to: "edit#remove_business"
@@ -196,8 +196,7 @@ Rails.application.routes.draw do
             patch "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
             put "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
 
-            # These routes need to appear before the next scope block to avoid clashing with the
-            # # `:investigation_product_id/:entity_id` routes.
+            get ":step/remove-upload/:upload_id", to: "edit#remove_upload", as: "remove_upload"
           end
         end
 

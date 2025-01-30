@@ -1,0 +1,47 @@
+<%= page_title("Add or remove supporting images") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @image_upload, url: notification_edit_path(@notification, :add_supporting_images), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Evidence</span>
+        Add or remove supporting images
+      </h1>
+
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.product.name_with_brand) %></li>
+        <% end %>
+        </ul>
+      <% end %>
+
+      <p class="govuk-body">To provide visual evidence of the product harm or incident/accident, you can upload either a single image or multiple images to the notification.</p>
+      
+      <%= f.hidden_field :file_upload, value: "" %>
+      <%= f.govuk_file_field :file_upload, label: nil, hint: { text: "Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB." } %>
+      <%= f.govuk_submit "Upload image", secondary: true %>
+      
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <% if @notification.image_uploads.present? %>
+        <%=
+          govuk_summary_list do |summary_list|
+            @notification.image_uploads.each do |image_upload|
+              summary_list.with_row do |row|
+                row.with_key(text: sanitize(image_upload.file_upload.filename.to_s))
+                row.with_action(text: "View", href: url_for(image_upload.file_upload), visually_hidden_text: "supporting image", html_attributes: { target: "_blank", rel: "noreferrer noopener" })
+                row.with_action(text: "Remove", href: remove_upload_notification_edit_index_path(@notification, step: "add_supporting_images", upload_id: image_upload.id), visually_hidden_text: "supporting image")
+              end
+            end
+          end
+        %>
+      <% end %>
+
+      <%= f.govuk_submit "Finish uploading images", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

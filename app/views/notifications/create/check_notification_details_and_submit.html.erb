@@ -174,7 +174,7 @@
         summary_list.with_row do |row|
           row.with_key(text: "Supporting images")
           row.with_value(text: sanitize(formatted_uploads(@notification.image_uploads.map(&:file_upload))).html_safe.presence || "Not provided")
-          row.with_action(text: "Change", href: wizard_path(:add_supporting_images), visually_hidden_text: "supporting images")
+          row.with_action(text: "Add or Remove", href: wizard_path(:add_supporting_images), visually_hidden_text: "supporting images")
         end
         summary_list.with_row do |row|
           row.with_key(text: "Supporting documents")
