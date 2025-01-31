@@ -332,8 +332,10 @@ module Notifications
         @notification.image_upload_ids.delete(upload.id)
         @notification.save!
         upload.destroy!
+        flash[:success] = "Supporting image removed successfully"
       end
-      redirect_to notification_edit_path(@notification, step)
+      @image_upload = ImageUpload.new(upload_model: @notification)
+      redirect_to notification_edit_path(@notification, :add_supporting_images)
     end
 
   private
