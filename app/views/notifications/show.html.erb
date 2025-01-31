@@ -205,8 +205,8 @@
       govuk_summary_list do |summary_list|
         summary_list.with_row do |row|
           row.with_key(text: "Supporting images")
-          row.with_value(text: formatted_uploads(@notification.image_uploads.map(&:file_upload)).html_safe.presence || "Not provided")
-          row.with_action(text: "Add or Remove", href: "/notifications/#{@notification.pretty_id}/edit/add_supporting_images", visually_hidden_text: "supporting images") if show_edit_link?
+          row.with_value(text: @notification.image_uploads.any? ? "#{@notification.image_uploads.count} #{'image'.pluralize(@notification.image_uploads.count)} uploaded" : "Not provided")
+          row.with_action(text: "Change", href: notification_edit_path(@notification, :add_supporting_images), visually_hidden_text: "supporting images") if show_edit_link?
         end
         summary_list.with_row do |row|
           row.with_key(text: "Supporting documents")
