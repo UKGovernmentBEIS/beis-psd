@@ -32,11 +32,11 @@
 
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col" })
-                row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
-                row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
-                row.with_cell(text: "Status", html_attributes: { scope: "col" })
-                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col" })
+                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col", "aria-label": "Product name(s)" })
+                row.with_cell(text: "Notification title", html_attributes: { scope: "col", "aria-label": "Notification title" })
+                row.with_cell(text: "Last updated", html_attributes: { scope: "col", "aria-label": "Last updated" })
+                row.with_cell(text: "Status", html_attributes: { scope: "col", "aria-label": "Status" })
+                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col", "aria-label": "Actions" })
               end
             end
 
@@ -50,25 +50,30 @@
 
                   row.with_cell(
                     header: true,
-                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe
+                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe,
+                    html_attributes: { "aria-label": "Product name(s): #{product_value}" }
                   )
-                  row.with_cell(text: sanitize(title_value))
-                  row.with_cell(text: updated_value)
-                  row.with_cell(text: govuk_tag(text: status_value, colour: "grey").html_safe)
+                  row.with_cell(
+                    text: sanitize(title_value),
+                    html_attributes: { "aria-label": "Notification title: #{title_value}" }
+                  )
+                  row.with_cell(
+                    text: updated_value,
+                    html_attributes: { "aria-label": "Last updated: #{updated_value}" }
+                  )
+                  row.with_cell(
+                    text: govuk_tag(text: status_value, colour: "grey").html_safe,
+                    html_attributes: { "aria-label": "Status: #{status_value}" }
+                  )
                   row.with_cell(
                     text: sanitize(
-                      "<span id=\"desc-#{notification.id}\" class=\"govuk-visually-hidden\">
-                        Product name(s): #{product_value}.
-                        Notification title: #{title_value}.
-                        Last updated: #{updated_value}.
-                        Status: #{status_value}.
-                      </span>
-                      <a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Make changes</a>
+                      "<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a>
                       <hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">
-                      <a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Delete</a>",
-                      tags: %w(a hr span),
-                      attributes: %w(href class id aria-describedby)
-                    ).html_safe
+                      <a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>",
+                      tags: %w(a hr),
+                      attributes: %w(href class)
+                    ).html_safe,
+                    html_attributes: { "aria-label": "Actions: Make changes or Delete" }
                   )
                 end
               end
@@ -85,11 +90,11 @@
 
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col" })
-                row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
-                row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
-                row.with_cell(text: "Status", html_attributes: { scope: "col" })
-                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col" })
+                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col", "aria-label": "Product name(s)" })
+                row.with_cell(text: "Notification title", html_attributes: { scope: "col", "aria-label": "Notification title" })
+                row.with_cell(text: "Last updated", html_attributes: { scope: "col", "aria-label": "Last updated" })
+                row.with_cell(text: "Status", html_attributes: { scope: "col", "aria-label": "Status" })
+                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col", "aria-label": "Actions" })
               end
             end
 
@@ -103,23 +108,28 @@
 
                   row.with_cell(
                     header: true,
-                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe
+                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe,
+                    html_attributes: { "aria-label": "Product name(s): #{product_value}" }
                   )
-                  row.with_cell(text: sanitize(title_value))
-                  row.with_cell(text: updated_value)
-                  row.with_cell(text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe)
+                  row.with_cell(
+                    text: sanitize(title_value),
+                    html_attributes: { "aria-label": "Notification title: #{title_value}" }
+                  )
+                  row.with_cell(
+                    text: updated_value,
+                    html_attributes: { "aria-label": "Last updated: #{updated_value}" }
+                  )
+                  row.with_cell(
+                    text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe,
+                    html_attributes: { "aria-label": "Status: #{status_value}" }
+                  )
                   row.with_cell(
                     text: sanitize(
-                      "<span id=\"desc-submitted-#{notification.id}\" class=\"govuk-visually-hidden\">
-                        Product name(s): #{product_value}.
-                        Notification title: #{title_value}.
-                        Last updated: #{updated_value}.
-                        Status: #{status_value}.
-                      </span>
-                      <a href=\"#{notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-submitted-#{notification.id}\">Update notification</a>",
-                      tags: %w(a span),
-                      attributes: %w(href class id aria-describedby)
-                    ).html_safe
+                      "<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>",
+                      tags: %w(a),
+                      attributes: %w(href class)
+                    ).html_safe,
+                    html_attributes: { "aria-label": "Actions: Update notification" }
                   )
                 end
               end
