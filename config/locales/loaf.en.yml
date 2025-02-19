@@ -28,3 +28,5 @@ en:
         your_prism_risk_assessments: Your risk assessments
         team_prism_risk_assessments: Team risk assessments
         all_prism_risk_assessments: All risk assessments - Search
+      notifications:
+        label: Notifications

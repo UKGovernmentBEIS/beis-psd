@@ -11,7 +11,7 @@ module Notifications
     before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers update_batch_numbers update_customs_codes update_ucr_numbers delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
-    breadcrumb "cases.label", :your_cases_investigations
+    breadcrumb "notifications.label", :your_notifications
 
     def index
       if params[:notification_pretty_id].present?

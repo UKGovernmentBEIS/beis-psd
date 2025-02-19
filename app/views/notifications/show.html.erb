@@ -214,8 +214,8 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Supporting documents")
-          row.with_value(text: formatted_uploads(@notification.documents).html_safe.presence || "Not provided")
-          row.with_action(text: "Change", href: investigation_supporting_information_index_path(@notification, anchor: "other"), visually_hidden_text: "supporting documents") if show_edit_link?
+          row.with_value(text: formatted_generic_supporting_information_attachments(@notification.generic_supporting_information_attachments))
+          row.with_action(text: "Change", href: notification_add_supporting_documents_path(@notification), visually_hidden_text: "supporting documents") if show_edit_link?
         end
       end
     %>

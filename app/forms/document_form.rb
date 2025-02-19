@@ -32,12 +32,16 @@ class DocumentForm
   end
 
   def cache_file!(user)
+    return if document.nil? || document.blank?
+
     if document.is_a?(ActiveStorage::Blob)
       document.metadata["title"] = title
       document.metadata["description"] = description
       document.metadata["updated"] = Time.zone.now
       document.save!
     elsif document.instance_of?(String)
+      return if document.blank?
+
       self.document = ActiveStorage::Blob.find(document)
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
     elsif document

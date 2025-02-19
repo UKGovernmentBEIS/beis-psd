@@ -6,7 +6,7 @@ class NotificationsController < ApplicationController
   before_action :set_last_case_view_cookie, only: %i[index]
   before_action :set_notification, except: %i[index your_notifications team_notifications assigned_notifications]
 
-  breadcrumb "cases.label", :your_cases_investigations
+  breadcrumb "notifications.label", :your_notifications
 
   # GET /notifications
   def index

@@ -8,7 +8,7 @@ module Notifications
     before_action :set_test_result, only: %i[show_with_notification_product_test update_with_notification_product_test]
     before_action :set_test_result_list, only: %i[show_with_notification_product update_with_notification_product]
 
-    breadcrumb "cases.label", :your_cases_investigations
+    breadcrumb "notifications.label", :your_notifications
 
     def index; end
 

@@ -1,0 +1,15 @@
+<%= page_title("Remove document", errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: remove_upload_notification_add_supporting_documents_path(@notification, @upload), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want to remove this supporting document from your notification?
+      </h1>
+      <p class="govuk-body">This action will permanently delete <strong><%= @upload.filename %></strong>. Please confirm if you wish to proceed.</p>
+      <%= f.govuk_submit "Remove supporting document", warning: true do %>
+        <a href="<%= notification_add_supporting_documents_path(@notification) %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

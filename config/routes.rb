@@ -221,6 +221,16 @@ Rails.application.routes.draw do
             delete ":upload_id/remove", to: "add_supporting_images#remove_upload"
           end
         end
+
+        # Supporting documents routes must be defined before generic resource routes
+        # to prevent conflicts with :id parameters and ensure proper routing precedence
+        resource :add_supporting_documents, controller: "add_supporting_documents", only: %i[show], path: "add-supporting-documents" do
+          member do
+            post "", to: "add_supporting_documents#update"
+            get ":upload_id/remove", to: "add_supporting_documents#remove_upload", as: "remove_upload"
+            delete ":upload_id/remove", to: "add_supporting_documents#remove_upload"
+          end
+        end
       end
     end
 

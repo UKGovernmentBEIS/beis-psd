@@ -91,15 +91,84 @@ RSpec.describe DocumentForm, :with_test_queue_adapter do
         expect(form).to be_invalid
       end
     end
-    # rubocop:disable RSpec/SubjectStub
 
-    context "with large file" do
-      it "is invalid" do
-        allow(form).to receive(:max_file_byte_size).and_return(1)
-        expect(form).to be_invalid
+    context "with file size validations" do
+      context "with file larger than maximum size" do
+        before do
+          allow(form.document).to receive_messages(byte_size: 101.megabytes, image?: true)
+        end
+
+        it "is invalid" do
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("Image file must be smaller than 100 MB in size")
+        end
+      end
+
+      context "with file larger than maximum size (non-image)" do
+        before do
+          allow(form.document).to receive_messages(byte_size: 101.megabytes, image?: false)
+        end
+
+        it "is invalid" do
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("File must be smaller than 100 MB in size")
+        end
+      end
+
+      context "with empty file" do
+        before do
+          allow(form.document).to receive(:byte_size).and_return(0)
+        end
+
+        it "is invalid" do
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("The selected file could not be uploaded – try again")
+        end
+      end
+
+      context "with file within size limits" do
+        before do
+          allow(form.document).to receive(:byte_size).and_return(50.megabytes)
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
       end
     end
-    # rubocop:enable RSpec/SubjectStub
+
+    context "with antivirus validation" do
+      context "when file is not yet scanned" do
+        before do
+          allow(form.document).to receive(:metadata).and_return({})
+        end
+
+        it "skips the validation" do
+          expect(form).to be_valid
+        end
+      end
+
+      context "when file is marked as safe" do
+        before do
+          allow(form.document).to receive(:metadata).and_return({ "safe" => true })
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+      end
+
+      context "when file is marked as unsafe" do
+        before do
+          allow(form.document).to receive(:metadata).and_return({ "safe" => false })
+        end
+
+        it "is invalid" do
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("Files must be virus free")
+        end
+      end
+    end
   end
 
   describe "#initialize" do
@@ -181,6 +250,26 @@ RSpec.describe DocumentForm, :with_test_queue_adapter do
           form.cache_file!(user)
           expect(form.document.metadata["updated"].to_json).to eq(Time.zone.now.to_json)
         end
+      end
+
+      it "preserves the original created_by metadata" do
+        original_created_by = form.document.metadata["created_by"]
+        form.cache_file!(user)
+        expect(form.document.metadata["created_by"]).to eq(original_created_by)
+      end
+    end
+
+    context "with metadata handling" do
+      it "handles empty description" do
+        form.description = nil
+        form.cache_file!(user)
+        expect(form.document.metadata["description"]).to be_nil
+      end
+
+      it "handles line endings in description" do
+        form.description = "Test\n\nDescription\n"
+        form.cache_file!(user)
+        expect(form.document.metadata["description"]).to eq("Test\n\nDescription\n")
       end
     end
   end

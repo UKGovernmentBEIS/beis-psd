@@ -1,0 +1,41 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_supporting_documents.title"), errors: @document_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @document_form, url: notification_add_supporting_documents_path(@notification), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_supporting_documents.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.product.name_with_brand) %></li>
+        <% end %>
+        </ul>
+      <% end %>
+      <p class="govuk-body">To provide proof of the product harm or accident, you can upload supporting documents with your notification.</p>
+      <%= f.govuk_text_field :title, label: { text: "Document title", size: "s" } %>
+      <%= f.govuk_file_field :document, label: nil, hint: { text: "Maximum file size: 100MB." } %>
+      <%= f.govuk_submit "Upload document", secondary: true %>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <% if @notification.documents.present? %>
+        <%=
+          govuk_summary_list(classes: "opss-file-list") do |summary_list|
+            @notification.documents.each do |document|
+              summary_list.with_row do |row|
+                row.with_key(text: sanitize(document.filename.to_s))
+                row.with_value(text: sanitize(document.metadata["title"].to_s))
+                row.with_action(text: "View", href: url_for(document), visually_hidden_text: "supporting document", html_attributes: { target: "_blank", rel: "noreferrer noopener" })
+                row.with_action(text: "Remove", href: remove_upload_notification_add_supporting_documents_path(@notification, document), visually_hidden_text: "supporting document")
+              end
+            end
+          end
+        %>
+      <% end %>
+      <%= link_to "Finish uploading documents", notification_path(@notification), class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

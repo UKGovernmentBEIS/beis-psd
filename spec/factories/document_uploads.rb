@@ -85,4 +85,22 @@ FactoryBot.define do
       model.update!(document_upload_ids: [document_upload.id])
     end
   end
+
+  factory :document_upload do
+    transient do
+      notification { create(:notification) }
+    end
+
+    title { Faker::Lorem.sentence }
+    description { Faker::Lorem.paragraph }
+
+    after(:build) do |document_upload, evaluator|
+      document_upload.upload_model = evaluator.notification
+      document_upload.file_upload.attach(
+        io: File.open(Rails.root.join("test/fixtures/files/test_result.txt")),
+        filename: "test_result.txt",
+        content_type: "text/plain"
+      )
+    end
+  end
 end

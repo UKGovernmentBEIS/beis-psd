@@ -178,6 +178,12 @@ module Notifications
       uploads.map { |upload| link_to "#{upload.blob.filename} (opens in new tab)", upload.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if upload.blob.present? }.join("<br>")
     end
 
+    def formatted_generic_supporting_information_attachments(attachments)
+      return "Not provided" if attachments.empty?
+
+      safe_join(attachments.map { |file| link_to file.filename, url_for(file), target: "_blank", rel: "noopener" }, tag.br)
+    end
+
     def risk_level_tag
       case @notification.risk_level
       when "low"
